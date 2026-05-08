@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus by PILLRZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #070a0f;
+    --surface: rgba(13,17,23,0.75);
+    --surface-2: rgba(20,27,37,0.65);
+    --surface-solid: #0d1117;
+    --border: rgba(255,255,255,0.08);
+    --border-active: rgba(99,210,255,0.5);
+    --accent: #63d2ff;
+    --text: #f0f4f8;
+    --muted: #5a6a7e;
+    --muted-2: #8899aa;
+    --success: #4ade80;
+    --tag-bg: rgba(99,210,255,0.08);
+    --radius: 20px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(99,210,255,0.013) 1px, transparent 1px), linear-gradient(90deg, rgba(99,210,255,0.013) 1px, transparent 1px);
+    background-size: 48px 48px; pointer-events: none; z-index: 0;
+  }
+  .glow-orb { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; }
+  .glow-1 { width: 700px; height: 700px; background: rgba(99,210,255,0.06); top: -250px; right: -150px; }
+  .glow-2 { width: 600px; height: 600px; background: rgba(167,139,250,0.05); bottom: 50px; left: -200px; }
+  .glow-3 { width: 400px; height: 400px; background: rgba(74,222,128,0.03); top: 50%; left: 40%; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(7,10,15,0.82); backdrop-filter: blur(24px);
+  }
+  .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 16px var(--accent); animation: pulseLogo 2s ease-in-out infinite; }
+  @keyframes pulseLogo { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.65)} }
+  .nav-links { display: flex; gap: 8px; list-style: none; }
+  .nav-links a { color: var(--muted-2); text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: .04em; padding: 8px 16px; border-radius: 10px; transition: all .25s cubic-bezier(0.4,0,0.2,1); }
+  .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+  /* Hero */
+  .hero { position: relative; z-index: 1; padding: 200px 48px 80px; max-width: 1200px; margin: 0 auto; }
+  .hero-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .22em; color: var(--accent); text-transform: uppercase; margin-bottom: 32px; display: flex; align-items: center; gap: 14px; }
+  .hero-label::before { content:''; display:block; width:36px; height:1px; background: linear-gradient(90deg, var(--accent), transparent); }
+  h1 { font-size: clamp(32px,4vw,52px); font-weight: 700; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px; max-width: 640px; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 17px; color: var(--muted-2); line-height: 1.7; max-width: 500px; font-weight: 400; margin-bottom: 48px; }
+
+  /* Progress bar */
+  .progress-wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto 32px; padding: 0 48px; }
+  .progress-track { height: 3px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #a78bfa); width: 0%; transition: width .7s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 0 12px var(--accent); }
+  .progress-labels { display: flex; justify-content: space-between; margin-top: 10px; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+
+  /* Import strip */
+  .import-strip { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto 32px; padding: 0 48px; }
+  .import-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .import-panel {
+    background: var(--surface); backdrop-filter: blur(16px);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px; transition: all .35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .import-panel:hover { border-color: rgba(99,210,255,0.22); transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.25); }
+  .import-panel.has-data { border-color: rgba(74,222,128,0.4); background: rgba(74,222,128,0.025); }
+  .import-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .import-label { display: flex; align-items: center; gap: 12px; }
+  .import-platform-badge { padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+  .li-badge { background: rgba(0,119,181,0.15); color: #5bc4e8; border: 1px solid rgba(0,119,181,0.3); }
+  .x-badge  { background: rgba(255,255,255,0.06); color: #bac4d0; border: 1px solid rgba(255,255,255,0.12); }
+  .import-title { font-size: 15px; font-weight: 700; }
+  .import-count { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--success); font-weight: 700; }
+  .import-desc { font-size: 13px; color: var(--muted-2); line-height: 1.65; margin-bottom: 20px; }
+
+  .drop-zone { border: 2px dashed var(--border); border-radius: 14px; padding: 24px; text-align: center; cursor: pointer; transition: all .3s; position: relative; overflow: hidden; }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--border-active); background: rgba(99,210,255,0.05); }
+  .drop-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .drop-zone-text { font-size: 13px; color: var(--muted-2); pointer-events: none; line-height: 1.6; }
+  .drop-zone-text strong { color: var(--accent); }
+  .drop-zone.loaded { border-color: rgba(74,222,128,0.5); border-style: solid; background: rgba(74,222,128,0.05); }
+  .drop-loaded-text { font-size: 13px; color: var(--success); font-weight: 700; }
+
+  .howto-toggle { background: none; border: none; color: var(--muted); font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; margin-top: 14px; padding: 0; transition: color .2s; display: block; }
+  .howto-toggle:hover { color: var(--accent); }
+  .import-howto { margin-top: 12px; padding: 14px 16px; background: rgba(255,255,255,0.03); border-radius: 12px; font-size: 12px; color: var(--muted-2); line-height: 1.9; display: none; border: 1px solid var(--border); }
+  .import-howto.open { display: block; animation: slideDown .25s ease-out; }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+
+  .paste-zone { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; line-height: 1.7; outline: none; resize: vertical; min-height: 90px; transition: all .25s; }
+  .paste-zone:focus { border-color: var(--border-active); background: rgba(99,210,255,0.03); box-shadow: 0 0 0 4px rgba(99,210,255,0.08); }
+  .paste-zone::placeholder { color: var(--muted); }
+  .parse-btn { margin-top: 12px; padding: 11px 20px; background: rgba(99,210,255,0.09); border: 1px solid var(--border-active); border-radius: 12px; color: var(--accent); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .3s cubic-bezier(0.4,0,0.2,1); width: 100%; }
+  .parse-btn:hover { background: var(--accent); color: #050810; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,210,255,0.25); }
+
+  .import-stats { display: flex; gap: 16px; margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px; }
+  .istat { text-align: center; flex: 1; }
+  .istat-val { font-family: 'DM Mono', monospace; font-size: 22px; color: var(--accent); display: block; font-weight: 700; }
+  .istat-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-top: 2px; display: block; }
+
+  /* Main card */
+  .main-card { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto 48px; padding: 0 48px; }
+  .card {
+    background: var(--surface); backdrop-filter: blur(20px);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+  }
+  .card-header { padding: 28px 32px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .card-title { font-size: 12px; font-weight: 800; letter-spacing: .14em; color: var(--muted-2); text-transform: uppercase; }
+
+  .data-pills { display: flex; gap: 8px; }
+  .data-pill { padding: 5px 13px; border-radius: 100px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .pill-li { background: rgba(0,119,181,0.12); color: #5bc4e8; border: 1px solid rgba(0,119,181,0.25); }
+  .pill-x  { background: rgba(255,255,255,0.05); color: #bac4d0; border: 1px solid rgba(255,255,255,0.1); }
+  .pill-hide { display: none; }
+
+  .platform-toggle { display: flex; gap: 6px; background: rgba(255,255,255,0.04); border-radius: 14px; padding: 5px; }
+  .ptoggle-btn { padding: 8px 18px; border-radius: 10px; border: none; background: transparent; color: var(--muted); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .3s cubic-bezier(0.4,0,0.2,1); }
+  .ptoggle-btn.active-li { background: #0077b5; color: white; box-shadow: 0 4px 14px rgba(0,119,181,0.35); }
+  .ptoggle-btn.active-x  { background: #e7e7e7; color: #000; box-shadow: 0 4px 14px rgba(255,255,255,0.15); }
+  .ptoggle-btn.active-both { background: var(--accent); color: #050810; box-shadow: 0 4px 14px rgba(99,210,255,0.3); }
+  .ptoggle-btn:not(.active-li):not(.active-x):not(.active-both):hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+  .input-area { padding: 32px; border-bottom: 1px solid var(--border); }
+
+  .mode-row { display: flex; gap: 8px; margin-bottom: 24px; background: rgba(255,255,255,0.04); padding: 5px; border-radius: 14px; width: fit-content; }
+  .mode-btn { padding: 10px 22px; border-radius: 10px; border: none; background: transparent; color: var(--muted-2); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .3s cubic-bezier(0.4,0,0.2,1); }
+  .mode-btn.active { background: var(--surface-solid); color: var(--accent); border: 1px solid var(--border-active); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+  .mode-btn:hover:not(.active) { color: var(--text); }
+  .mode-hint { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted-2); padding: 12px 16px; background: rgba(99,210,255,0.04); border: 1px solid rgba(99,210,255,0.12); border-radius: 12px; margin-bottom: 24px; line-height: 1.7; }
+  .mode-hint strong { color: var(--accent); }
+
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .input-group { display: flex; flex-direction: column; gap: 10px; }
+  label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+  input[type="text"], textarea, select {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; color: var(--text);
+    font-family: 'Syne', sans-serif; font-size: 14px; outline: none; width: 100%;
+    transition: all .25s;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--border-active); background: rgba(99,210,255,0.025);
+    box-shadow: 0 0 0 4px rgba(99,210,255,0.1);
+  }
+  input::placeholder, textarea::placeholder { color: var(--muted); }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+  select option { background: #141b25; }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .tag { padding: 6px 14px; border-radius: 100px; background: var(--tag-bg); border: 1px solid var(--border-active); color: var(--accent); font-size: 12px; font-weight: 700; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px; }
+  .tag:hover { background: rgba(99,210,255,0.18); transform: translateY(-1px); }
+  .tag .remove { opacity: .5; font-size: 11px; cursor: pointer; }
+  .add-tag-input { background: rgba(255,255,255,0.04); border: 1px dashed var(--border); border-radius: 100px; padding: 6px 16px; color: var(--text); font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; outline: none; width: 140px; transition: all .25s; }
+  .add-tag-input:focus { border-color: var(--border-active); }
+  .add-tag-input::placeholder { color: var(--muted); }
+
+  /* Filter panel */
+  .filter-panel { margin-top: 24px; background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .filter-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; transition: background .2s; }
+  .filter-panel-header:hover { background: rgba(255,255,255,0.03); }
+  .filter-panel-title { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted-2); letter-spacing: .14em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+  .filter-active-count { background: var(--accent); color: #050810; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 100px; display: none; }
+  .filter-active-count.show { display: inline-block; }
+  .filter-toggle-icon { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; transition: transform .3s; }
+  .filter-panel-body {
+    padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    max-height: 2400px; opacity: 1;
+    transition: max-height .45s cubic-bezier(0.4,0,0.2,1), opacity .3s, padding .3s;
+    overflow: hidden;
+  }
+  .filter-panel-body.collapsed { max-height: 0; padding: 0 24px; opacity: 0; }
+  .filter-group { display: flex; flex-direction: column; gap: 10px; }
+  .filter-group-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: .16em; text-transform: uppercase; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    padding: 6px 14px; border-radius: 10px; border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03); color: var(--muted-2);
+    font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+    cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .chip:hover { border-color: rgba(255,255,255,0.25); color: var(--text); background: rgba(255,255,255,0.06); transform: translateY(-1px); }
+  .chip.selected { border-color: var(--border-active); background: rgba(99,210,255,0.14); color: var(--accent); box-shadow: 0 2px 10px rgba(99,210,255,0.12); }
+  .filter-divider { grid-column: 1 / -1; height: 1px; background: var(--border); }
+
+  /* Search button */
+  .search-btn {
+    width: 100%; padding: 18px; border-radius: 16px; border: none;
+    background: var(--accent); color: #050810; font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 24px;
+    transition: all .4s cubic-bezier(0.34,1.56,0.64,1); letter-spacing: .02em;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .search-btn:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 16px 44px rgba(99,210,255,0.38); }
+  .search-btn:active { transform: translateY(-1px) scale(0.99); }
+  .search-btn.loading { opacity: .85; pointer-events: none; }
+  .btn-spinner { width:17px;height:17px;border:2.5px solid rgba(0,0,0,.25);border-top-color:#050810;border-radius:50%;animation:spin .65s linear infinite;display:none; }
+  .search-btn.loading .btn-spinner { display:block; }
+  .search-btn.loading .btn-text { opacity:.75; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  /* Results */
+  .results-area { padding: 32px; min-height: 240px; }
+  .results-placeholder { display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 48px;color:var(--muted);text-align:center;gap:16px; }
+  .placeholder-icon { font-size:40px;opacity:.35; }
+  .placeholder-text { font-size:15px;line-height:1.7;max-width:380px; }
+
+  .results-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px; }
+  .results-meta { font-family:'DM Mono',monospace;font-size:12px;color:var(--muted-2); }
+  .results-meta strong { color:var(--accent); }
+  .sort-select { width:auto;padding:8px 14px;font-size:12px;border-radius:10px; }
+  .source-tag { font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:5px;margin-left:8px;vertical-align:middle; }
+  .source-real { background:rgba(74,222,128,0.1);color:var(--success);border:1px solid rgba(74,222,128,0.22); }
+  .source-ai   { background:rgba(167,139,250,0.1);color:#c4b5fd;border:1px solid rgba(167,139,250,0.22); }
+
+  .results-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px; }
+
+  /* Person card with Stitch polish */
+  .person-card {
+    background: var(--surface-2); backdrop-filter: blur(10px);
+    border: 1px solid var(--border); border-radius: 18px; padding: 22px;
+    transition: all .4s cubic-bezier(0.175,0.885,0.32,1.275);
+    position: relative; overflow: hidden; animation: cardIn .5s cubic-bezier(0.2,0.8,0.2,1) both;
+  }
+  .person-card:hover {
+    border-color: var(--border-active);
+    transform: translateY(-7px) scale(1.015);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.45), 0 0 24px rgba(99,210,255,0.1);
+    z-index: 2;
+  }
+  @keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .person-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .3s; }
+  .person-card.plat-li::before { background:linear-gradient(90deg,#0077b5,#00b4db); }
+  .person-card.plat-x::before  { background:linear-gradient(90deg,#555,#aaa); }
+  .person-card:hover::before { opacity:1; }
+
+  .person-top { display:flex;gap:14px;align-items:flex-start;margin-bottom:14px; }
+  .avatar { width:48px;height:48px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;position:relative; }
+  .platform-pip { position:absolute;bottom:-2px;right:-2px;width:17px;height:17px;border-radius:50%;border:2px solid #141b25;display:flex;align-items:center;justify-content:center;font-size:8px; }
+  .pip-li { background:#0077b5;color:white;font-size:7px;font-weight:800; }
+  .pip-x  { background:#111;color:#ccc; }
+  .person-info { flex:1;min-width:0; }
+  .person-name { font-size:15px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .person-handle { font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-2);margin-bottom:4px; }
+  .person-title { font-size:12px;color:var(--muted-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+
+  /* Relevance badge with pulse for top matches */
+  .relevance-badge { flex-shrink:0;padding:5px 12px;border-radius:100px;font-family:'DM Mono',monospace;font-size:12px;font-weight:700; }
+  .rel-high   { background:rgba(74,222,128,.13);color:#4ade80;border:1px solid rgba(74,222,128,.28); }
+  .rel-high.pulse { animation: badgePulse 2.5s ease-in-out infinite; }
+  @keyframes badgePulse { 0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.3)} 50%{box-shadow:0 0 0 8px rgba(74,222,128,0)} }
+  .rel-medium { background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.22); }
+  .rel-low    { background:rgba(255,255,255,.05);color:var(--muted-2);border:1px solid var(--border); }
+
+  .reason-box { margin-bottom:14px;padding:12px 14px;border-radius:12px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.18);font-size:12px;color:#d8b4fe;line-height:1.6; }
+  .person-bio { font-size:13px;color:var(--muted-2);line-height:1.65;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+  .person-tags { display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px; }
+  .person-tag { padding:3px 9px;border-radius:6px;background:rgba(99,210,255,0.07);color:var(--accent);font-size:11px;font-weight:600; }
+  .person-stats { display:flex;gap:16px;border-top:1px solid var(--border);padding-top:14px; }
+  .stat { display:flex;flex-direction:column;gap:3px; }
+  .stat-val { font-family:'DM Mono',monospace;font-size:13px;color:var(--text); }
+  .stat-label { font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em; }
+  .connect-btn { margin-top:14px;width:100%;padding:11px;border-radius:10px;border:1px solid var(--border-active);background:transparent;color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .3s;letter-spacing:.04em; }
+  .connect-btn:hover { background:var(--accent); color:#050810; transform:translateY(-1px); }
+  .connect-btn.saved { border-color:var(--success);color:var(--success);background:rgba(74,222,128,.06); }
+
+  /* Layout + sidebar */
+  .layout { max-width:1200px;margin:0 auto;padding:0 48px 100px;position:relative;z-index:1;display:grid;grid-template-columns:1fr 320px;gap:24px; }
+  .sidebar-panel { position:sticky;top:80px;height:fit-content; }
+  .sidebar-card { background:var(--surface);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;box-shadow:0 16px 40px rgba(0,0,0,0.22); }
+  .sidebar-header { padding:16px 24px;border-bottom:1px solid var(--border);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);background:rgba(255,255,255,0.02); }
+  .sidebar-body { padding:18px 24px; }
+  .insight-item { display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start;transition:transform .2s; }
+  .insight-item:last-child { border-bottom:none; }
+  .insight-item:hover { transform:translateX(4px); }
+  .insight-icon { font-size:18px;flex-shrink:0;margin-top:1px; }
+  .insight-text { font-size:13px;color:var(--muted-2);line-height:1.55; }
+  .insight-text strong { color:var(--text); }
+  .saved-list { display:flex;flex-direction:column;gap:8px; }
+  .saved-item { display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid transparent;transition:all .25s; }
+  .saved-item:hover { border-color:var(--border-active);background:rgba(99,210,255,0.04); }
+  .saved-avatar { width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0; }
+  .saved-info { flex:1;min-width:0; }
+  .saved-name { font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .saved-platform { font-size:10px;color:var(--muted);margin-top:2px; }
+  .empty-saved { text-align:center;color:var(--muted);font-size:13px;padding:24px 0;font-style:italic; }
+
+  /* Network summary bar */
+  .network-summary { display:flex;gap:0;margin-bottom:28px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;overflow:hidden; }
+  .ns-stat { flex:1;padding:18px 20px;text-align:center;border-right:1px solid var(--border);transition:background .2s; }
+  .ns-stat:last-child { border-right:none; }
+  .ns-stat:hover { background:rgba(99,210,255,0.04); }
+  .ns-val { font-family:'DM Mono',monospace;font-size:22px;font-weight:700;color:var(--accent);display:block;margin-bottom:4px; }
+  .ns-lbl { font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em; }
+
+  /* Outreach modal */
+  .modal-backdrop { position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .2s ease; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .modal { background:#0d1117;border:1px solid var(--border-active);border-radius:var(--radius);padding:32px;max-width:580px;width:100%;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.6);animation:modalIn .3s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes modalIn { from{opacity:0;transform:scale(0.92) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+  .modal-close { position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;transition:color .2s; }
+  .modal-close:hover { color:var(--text); }
+  .modal-title { font-size:16px;font-weight:800;margin-bottom:6px; }
+  .modal-sub { font-size:13px;color:var(--muted-2);margin-bottom:20px; }
+  .modal-tabs { display:flex;gap:6px;margin-bottom:16px;background:rgba(255,255,255,0.04);padding:4px;border-radius:10px;width:fit-content; }
+  .mtab { padding:6px 16px;border-radius:7px;border:none;background:transparent;color:var(--muted-2);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s; }
+  .mtab.active { background:var(--surface-solid);color:var(--accent);border:1px solid var(--border-active); }
+  .outreach-box { background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:13px;color:var(--muted-2);line-height:1.7;min-height:120px;white-space:pre-wrap;font-family:'DM Mono',monospace; }
+  .outreach-loading { display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:20px 0; }
+  .modal-actions { display:flex;gap:10px;margin-top:16px; }
+  .modal-btn { flex:1;padding:11px;border-radius:10px;border:1px solid var(--border-active);background:transparent;color:var(--accent);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .25s; }
+  .modal-btn:hover { background:var(--accent);color:#050810; }
+  .modal-btn.primary { background:var(--accent);color:#050810;border-color:var(--accent); }
+  .modal-btn.primary:hover { box-shadow:0 8px 24px rgba(99,210,255,0.3);transform:translateY(-1px); }
+
+  /* Card action row */
+  .card-actions { display:flex;gap:8px;margin-top:14px; }
+  .card-btn { flex:1;padding:10px;border-radius:10px;border:1px solid var(--border-active);background:transparent;color:var(--accent);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .25s;letter-spacing:.03em; }
+  .card-btn:hover { background:var(--accent);color:#050810; }
+  .card-btn.saved-btn.saved { border-color:var(--success);color:var(--success);background:rgba(74,222,128,.06); }
+  .card-btn.saved-btn.saved:hover { background:rgba(74,222,128,.15); }
+
+  /* Export bar */
+  .export-bar { display:flex;align-items:center;gap:10px;padding:16px 20px;background:rgba(99,210,255,0.04);border-top:1px solid var(--border); }
+  .export-label { font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-2);letter-spacing:.08em;flex:1; }
+  .export-btn { padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted-2);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s; }
+  .export-btn:hover { border-color:var(--border-active);color:var(--accent); }
+  .export-btn.danger { color:#f87171; }
+  .export-btn.danger:hover { border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.06); }
+
+  /* Skeleton */
+  .skel { background:linear-gradient(90deg,rgba(255,255,255,0.03) 25%,rgba(255,255,255,0.06) 50%,rgba(255,255,255,0.03) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px; }
+  @keyframes shimmer { to{background-position:-200% 0} }
+  .skel-card { background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:18px;padding:22px; }
+  .skel-line { height:12px;margin-bottom:8px; }
+  .s60{width:60%} .s80{width:80%} .s100{width:100%}
+
+  @media(max-width:900px){
+    nav{padding:16px 20px}
+    .hero{padding:130px 20px 48px}
+    .progress-wrap,.import-strip,.main-card,.layout{padding:0 20px}
+    .import-panels,.input-grid{grid-template-columns:1fr}
+    .layout{grid-template-columns:1fr}
+    .sidebar-panel{position:static}
+    .filter-panel-body{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="glow-orb glow-1"></div>
+<div class="glow-orb glow-2"></div>
+<div class="glow-orb glow-3"></div>
+
+<nav>
+  <div class="logo"><div class="logo-dot"></div>Nexus</div>
+  <ul class="nav-links">
+    <li><a href="#how-it-works" onclick="toggleHowItWorks(event)">How it works</a></li>
+    <li><a href="#shortlist" onclick="scrollToShortlist(event)">Saved</a></li>
+  </ul>
+</nav>
+
+<!-- How it works panel -->
+<div id="howItWorksPanel" style="display:none; position:fixed; top:70px; right:24px; z-index:99; background:#0d1117; border:1px solid rgba(99,210,255,0.4); border-radius:16px; padding:24px 28px; max-width:320px; box-shadow:0 24px 64px rgba(0,0,0,0.5); animation:slideDown .25s ease-out;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+    <span style="font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-2);">How Nexus Works</span>
+    <button onclick="toggleHowItWorks(event)" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1;">×</button>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:14px;">
+    <div style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:20px; flex-shrink:0;">01</span>
+      <div>
+        <div style="font-size:13px; font-weight:700; margin-bottom:3px;">Import your network</div>
+        <div style="font-size:12px; color:var(--muted-2); line-height:1.6;">Upload your LinkedIn Connections CSV or paste your X following list. Your data never leaves your browser.</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:20px; flex-shrink:0;">02</span>
+      <div>
+        <div style="font-size:13px; font-weight:700; margin-bottom:3px;">Describe your goal</div>
+        <div style="font-size:12px; color:var(--muted-2); line-height:1.6;">Tell Nexus what you are building, hiring for, or trying to learn. Set filters to narrow by industry, expertise, and geography.</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:20px; flex-shrink:0;">03</span>
+      <div>
+        <div style="font-size:13px; font-weight:700; margin-bottom:3px;">Get ranked results</div>
+        <div style="font-size:12px; color:var(--muted-2); line-height:1.6;">Nexus scores every person in your network by relevance to your goal and surfaces the best matches with a reason why.</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:14px; align-items:flex-start;">
+      <span style="font-size:20px; flex-shrink:0;">04</span>
+      <div>
+        <div style="font-size:13px; font-weight:700; margin-bottom:3px;">Write outreach instantly</div>
+        <div style="font-size:12px; color:var(--muted-2); line-height:1.6;">One click generates a personalised LinkedIn DM, cold email, or X message for any result. Save your shortlist and export as CSV.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-label">Powered by Claude AI</div>
+  <h1>Find the people who <em>matter</em> to your work</h1>
+  <p class="hero-sub">Import your real LinkedIn connections or X following list. Nexus reads who you already know and surfaces the most relevant people for any goal you are working toward.</p>
+</section>
+
+<!-- Progress bar -->
+<div class="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="importProgress"></div></div>
+  <div class="progress-labels"><span>Import Data</span><span>Set Your Goal</span><span>Discovery Ready</span></div>
+</div>
+
+<!-- Import panels -->
+<div class="import-strip">
+  <div class="import-panels">
+
+    <div class="import-panel" id="liPanel">
+      <div class="import-top">
+        <div class="import-label">
+          <span class="import-platform-badge li-badge">in LinkedIn</span>
+          <span class="import-title">Import Connections CSV</span>
+        </div>
+        <span class="import-count" id="liCount" style="display:none"></span>
+      </div>
+      <p class="import-desc">LinkedIn lets you export your connections as a CSV file. Upload it and Nexus will analyze who you already know.</p>
+      <div class="drop-zone" id="liDropZone">
+        <input type="file" accept=".csv" id="liFileInput" onchange="handleLiFile(event)">
+        <div class="drop-zone-text" id="liDropText">
+          <strong>Click to upload</strong> or drag your CSV here<br>
+          <span style="font-size:11px;opacity:.6;margin-top:4px;display:block">Connections.csv from LinkedIn Settings</span>
+        </div>
+      </div>
+      <button class="howto-toggle" onclick="toggleHowto('liHowto',this)">How to export from LinkedIn +</button>
+      <div class="import-howto" id="liHowto">
+        1. Go to linkedin.com/mynetwork/invite-connect/connections/<br>
+        2. Click "Manage synced and imported contacts" at the top right<br>
+        3. Under "Advanced actions" click "Export contacts"<br>
+        4. Select Connections, request archive, wait for the email<br>
+        5. Download and upload Connections.csv here
+      </div>
+      <div id="liStats" style="display:none">
+        <div class="import-stats">
+          <div class="istat"><span class="istat-val" id="liTotal">0</span><span class="istat-lbl">Connections</span></div>
+          <div class="istat"><span class="istat-val" id="liCompanies">0</span><span class="istat-lbl">Companies</span></div>
+          <div class="istat"><span class="istat-val" id="liRoles">0</span><span class="istat-lbl">Unique roles</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="import-panel" id="xPanel">
+      <div class="import-top">
+        <div class="import-label">
+          <span class="import-platform-badge x-badge">𝕏 X / Twitter</span>
+          <span class="import-title">Import Following List</span>
+        </div>
+        <span class="import-count" id="xCount" style="display:none"></span>
+      </div>
+      <p class="import-desc">Paste handles you follow, one per line. Add a name or bio after a dash for better matching.</p>
+      <textarea class="paste-zone" id="xPasteInput" placeholder="@sama&#10;@naval - investor, philosopher&#10;@balajis - tech and crypto&#10;@VitalikButerin&#10;...one handle per line"></textarea>
+      <button class="parse-btn" onclick="parseXHandles()">Parse X Following List</button>
+      <button class="howto-toggle" onclick="toggleHowto('xHowto',this)" style="margin-top:10px;">How to get your X following list +</button>
+      <div class="import-howto" id="xHowto">
+        Option A: Go to x.com/following, manually copy handles as you scroll.<br><br>
+        Option B: Settings &gt; Your Account &gt; Download an archive of your data. Inside the zip, following.js has every account you follow.<br><br>
+        Option C: Use a browser extension like "Export Twitter Following" to get a plain text list.
+      </div>
+      <div id="xStats" style="display:none">
+        <div class="import-stats">
+          <div class="istat"><span class="istat-val" id="xTotal">0</span><span class="istat-lbl">Accounts</span></div>
+          <div class="istat"><span class="istat-val" id="xWithBio">0</span><span class="istat-lbl">With context</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Search card -->
+<div class="main-card">
+  <div class="card">
+    <div class="card-header">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <span class="card-title">Discovery Console</span>
+        <div class="data-pills">
+          <span class="data-pill pill-li pill-hide" id="liPill">in <span id="liPillCount">0</span> connections</span>
+          <span class="data-pill pill-x pill-hide" id="xPill">𝕏 <span id="xPillCount">0</span> following</span>
+        </div>
+      </div>
+      <div class="platform-toggle">
+        <button class="ptoggle-btn active-both" data-p="both" onclick="setPlatform(this)">Both</button>
+        <button class="ptoggle-btn" data-p="linkedin" onclick="setPlatform(this)">in LinkedIn</button>
+        <button class="ptoggle-btn" data-p="x" onclick="setPlatform(this)">𝕏 X</button>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="mode-row">
+        <button class="mode-btn active" id="modeImport" onclick="setMode('import')">Search my network</button>
+        <button class="mode-btn" id="modeAI" onclick="setMode('ai')">AI Suggestions</button>
+      </div>
+      <div class="mode-hint" id="modeHint">
+        <strong>My network mode:</strong> Nexus ranks people you already follow by how relevant they are to your goal. Import your data above first.
+      </div>
+
+      <div class="input-grid">
+        <div class="input-group">
+          <label>What are you working on or looking for?</label>
+          <textarea id="goalInput" placeholder="e.g. Building a fintech startup and need advisors who understand RBI compliance and product-led growth loops…"></textarea>
+        </div>
+        <div class="input-group">
+          <label>Your context (optional)</label>
+          <textarea id="contextInput" placeholder="e.g. Founder, pre-seed, India-based, open to remote mentors…"></textarea>
+        </div>
+      </div>
+
+      <div class="input-group" style="margin-bottom:0;">
+        <label>Keywords / skills to match</label>
+        <div class="tag-row" id="tagRow">
+          <input class="add-tag-input" id="tagInput" placeholder="+ Add keyword" onkeydown="handleTagKey(event)">
+        </div>
+      </div>
+
+      <!-- Filter panel -->
+      <div class="filter-panel" id="filterPanel">
+        <div class="filter-panel-header" onclick="toggleFilters()">
+          <span class="filter-panel-title">
+            Filter Options
+            <span class="filter-active-count" id="filterCount">0</span>
+          </span>
+          <span class="filter-toggle-icon" id="filterToggleIcon">expand ▾</span>
+        </div>
+        <div class="filter-panel-body collapsed" id="filterBody">
+
+          <div class="filter-group">
+            <span class="filter-group-label">What do you need?</span>
+            <div class="chip-row">
+              <button class="chip selected" data-group="intent" data-val="collab" onclick="selectChip(this)">Collaborator</button>
+              <button class="chip" data-group="intent" data-val="cofounder" onclick="selectChip(this)">Cofounder</button>
+              <button class="chip" data-group="intent" data-val="advisor" onclick="selectChip(this)">Advisor</button>
+              <button class="chip" data-group="intent" data-val="mentor" onclick="selectChip(this)">Mentor</button>
+              <button class="chip" data-group="intent" data-val="hire" onclick="selectChip(this)">Hire / Recruit</button>
+              <button class="chip" data-group="intent" data-val="freelancer" onclick="selectChip(this)">Freelancer</button>
+              <button class="chip" data-group="intent" data-val="investor" onclick="selectChip(this)">Investor / VC</button>
+              <button class="chip" data-group="intent" data-val="angel" onclick="selectChip(this)">Angel</button>
+              <button class="chip" data-group="intent" data-val="partner" onclick="selectChip(this)">Biz Partner</button>
+              <button class="chip" data-group="intent" data-val="client" onclick="selectChip(this)">Potential Client</button>
+              <button class="chip" data-group="intent" data-val="learn" onclick="selectChip(this)">Learn From</button>
+              <button class="chip" data-group="intent" data-val="community" onclick="selectChip(this)">Community Builder</button>
+              <button class="chip" data-group="intent" data-val="press" onclick="selectChip(this)">Press / Media</button>
+              <button class="chip" data-group="intent" data-val="speaking" onclick="selectChip(this)">Speaking Opp</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-group-label">Their stage / role</span>
+            <div class="chip-row">
+              <button class="chip" data-group="stage" data-val="founder" onclick="selectChip(this)">Founder</button>
+              <button class="chip" data-group="stage" data-val="cxo" onclick="selectChip(this)">C-Suite / VP</button>
+              <button class="chip" data-group="stage" data-val="ic" onclick="selectChip(this)">Individual Contributor</button>
+              <button class="chip" data-group="stage" data-val="gp" onclick="selectChip(this)">GP / Fund Manager</button>
+              <button class="chip" data-group="stage" data-val="operator" onclick="selectChip(this)">Operator</button>
+              <button class="chip" data-group="stage" data-val="researcher" onclick="selectChip(this)">Researcher</button>
+              <button class="chip" data-group="stage" data-val="creator" onclick="selectChip(this)">Creator / Influencer</button>
+              <button class="chip" data-group="stage" data-val="journalist" onclick="selectChip(this)">Journalist</button>
+              <button class="chip" data-group="stage" data-val="policy" onclick="selectChip(this)">Policy / Gov</button>
+            </div>
+          </div>
+
+          <div class="filter-divider"></div>
+
+          <div class="filter-group">
+            <span class="filter-group-label">Industry</span>
+            <div class="chip-row">
+              <button class="chip" data-group="industry" data-val="web3" onclick="selectChip(this)">Web3 / Crypto</button>
+              <button class="chip" data-group="industry" data-val="defi" onclick="selectChip(this)">DeFi</button>
+              <button class="chip" data-group="industry" data-val="nft" onclick="selectChip(this)">NFT / Gaming</button>
+              <button class="chip" data-group="industry" data-val="ai" onclick="selectChip(this)">AI / ML</button>
+              <button class="chip" data-group="industry" data-val="infra" onclick="selectChip(this)">Dev Tools / Infra</button>
+              <button class="chip" data-group="industry" data-val="fintech" onclick="selectChip(this)">Fintech</button>
+              <button class="chip" data-group="industry" data-val="payments" onclick="selectChip(this)">Payments</button>
+              <button class="chip" data-group="industry" data-val="saas" onclick="selectChip(this)">SaaS / B2B</button>
+              <button class="chip" data-group="industry" data-val="consumer" onclick="selectChip(this)">Consumer / DTC</button>
+              <button class="chip" data-group="industry" data-val="marketplace" onclick="selectChip(this)">Marketplace</button>
+              <button class="chip" data-group="industry" data-val="media" onclick="selectChip(this)">Media / Content</button>
+              <button class="chip" data-group="industry" data-val="creator-econ" onclick="selectChip(this)">Creator Economy</button>
+              <button class="chip" data-group="industry" data-val="healthtech" onclick="selectChip(this)">Healthtech</button>
+              <button class="chip" data-group="industry" data-val="edtech" onclick="selectChip(this)">Edtech</button>
+              <button class="chip" data-group="industry" data-val="climate" onclick="selectChip(this)">Climate / Green</button>
+              <button class="chip" data-group="industry" data-val="hardware" onclick="selectChip(this)">Hardware / IoT</button>
+              <button class="chip" data-group="industry" data-val="deeptech" onclick="selectChip(this)">Deep Tech</button>
+              <button class="chip" data-group="industry" data-val="govtech" onclick="selectChip(this)">Govtech</button>
+              <button class="chip" data-group="industry" data-val="legaltech" onclick="selectChip(this)">Legaltech</button>
+              <button class="chip" data-group="industry" data-val="gaming" onclick="selectChip(this)">Gaming</button>
+              <button class="chip" data-group="industry" data-val="fashion" onclick="selectChip(this)">Fashion / Luxury</button>
+              <button class="chip" data-group="industry" data-val="food" onclick="selectChip(this)">Food / Beverage</button>
+              <button class="chip" data-group="industry" data-val="space" onclick="selectChip(this)">Space / Aerospace</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-group-label">Geography</span>
+            <div class="chip-row">
+              <button class="chip" data-group="geo" data-val="india" onclick="selectChip(this)">India</button>
+              <button class="chip" data-group="geo" data-val="sea" onclick="selectChip(this)">Southeast Asia</button>
+              <button class="chip" data-group="geo" data-val="mena" onclick="selectChip(this)">MENA</button>
+              <button class="chip" data-group="geo" data-val="us" onclick="selectChip(this)">United States</button>
+              <button class="chip" data-group="geo" data-val="europe" onclick="selectChip(this)">Europe</button>
+              <button class="chip" data-group="geo" data-val="latam" onclick="selectChip(this)">Latin America</button>
+              <button class="chip" data-group="geo" data-val="africa" onclick="selectChip(this)">Africa</button>
+              <button class="chip" data-group="geo" data-val="remote" onclick="selectChip(this)">Remote / Global</button>
+            </div>
+          </div>
+
+          <div class="filter-divider"></div>
+
+          <div class="filter-group">
+            <span class="filter-group-label">Audience size</span>
+            <div class="chip-row">
+              <button class="chip" data-group="audience" data-val="nano" onclick="selectChip(this)">Nano (&lt;1K)</button>
+              <button class="chip" data-group="audience" data-val="micro" onclick="selectChip(this)">Micro (1K–10K)</button>
+              <button class="chip" data-group="audience" data-val="mid" onclick="selectChip(this)">Mid (10K–100K)</button>
+              <button class="chip" data-group="audience" data-val="macro" onclick="selectChip(this)">Macro (100K+)</button>
+              <button class="chip" data-group="audience" data-val="mega" onclick="selectChip(this)">Mega (1M+)</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-group-label">Core expertise</span>
+            <div class="chip-row">
+              <button class="chip" data-group="expertise" data-val="growth" onclick="selectChip(this)">Growth</button>
+              <button class="chip" data-group="expertise" data-val="product" onclick="selectChip(this)">Product</button>
+              <button class="chip" data-group="expertise" data-val="engineering" onclick="selectChip(this)">Engineering</button>
+              <button class="chip" data-group="expertise" data-val="design" onclick="selectChip(this)">Design</button>
+              <button class="chip" data-group="expertise" data-val="sales" onclick="selectChip(this)">Sales / BD</button>
+              <button class="chip" data-group="expertise" data-val="marketing" onclick="selectChip(this)">Marketing</button>
+              <button class="chip" data-group="expertise" data-val="community" onclick="selectChip(this)">Community</button>
+              <button class="chip" data-group="expertise" data-val="ops" onclick="selectChip(this)">Operations</button>
+              <button class="chip" data-group="expertise" data-val="data" onclick="selectChip(this)">Data / Analytics</button>
+              <button class="chip" data-group="expertise" data-val="security" onclick="selectChip(this)">Security</button>
+              <button class="chip" data-group="expertise" data-val="legal" onclick="selectChip(this)">Legal / Compliance</button>
+              <button class="chip" data-group="expertise" data-val="finance" onclick="selectChip(this)">Finance / CFO</button>
+              <button class="chip" data-group="expertise" data-val="research" onclick="selectChip(this)">Research / Academia</button>
+              <button class="chip" data-group="expertise" data-val="content" onclick="selectChip(this)">Content / Writing</button>
+              <button class="chip" data-group="expertise" data-val="tokenomics" onclick="selectChip(this)">Tokenomics</button>
+              <button class="chip" data-group="expertise" data-val="ml-eng" onclick="selectChip(this)">ML Engineering</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <button class="search-btn" id="searchBtn" onclick="runSearch()">
+        <div class="btn-spinner" id="spinner"></div>
+        <span class="btn-text" id="btnText">Run Discovery Engine</span>
+      </button>
+    </div>
+
+    <div class="results-area" id="resultsArea">
+      <div class="results-placeholder">
+        <div class="placeholder-icon">⟡</div>
+        <div class="placeholder-text">Import your connections above, describe your goal, and run the discovery engine. Nexus will surface the most relevant people for your work.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div></div>
+  <div class="sidebar-panel" id="sidebarPanel" style="display:none;">
+    <div class="sidebar-card">
+      <div class="sidebar-header">Network Intelligence</div>
+      <div class="sidebar-body" id="insightBody"></div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-header">Shortlist</div>
+      <div class="sidebar-body">
+        <div class="saved-list" id="savedList"><div class="empty-saved">No one saved yet.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="outreachModal" style="display:none;" class="modal-backdrop" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalDirect()">×</button>
+    <div class="modal-title" id="modalName">Generate Outreach</div>
+    <div class="modal-sub" id="modalRole"></div>
+    <div class="modal-tabs">
+      <button class="mtab active" onclick="switchTab('linkedin',this)">LinkedIn DM</button>
+      <button class="mtab" onclick="switchTab('email',this)">Cold Email</button>
+      <button class="mtab" onclick="switchTab('x',this)">X DM</button>
+    </div>
+    <div class="outreach-box" id="outreachContent">
+      <div class="outreach-loading"><div class="btn-spinner" style="display:block;border-color:rgba(99,210,255,.2);border-top-color:var(--accent);"></div> Generating message...</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="copyOutreach()">Copy Message</button>
+      <button class="modal-btn" onclick="regenOutreach()">Regenerate</button>
+      <button class="modal-btn primary" onclick="closeModalDirect()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────
+let activePlatform = 'both';
+let activeMode = 'import';
+let tags = [];
+let savedPeople = [];
+let results = [];
+let liConnections = [];
+let xFollowing = [];
+
+// ── Nav functions ──────────────────────────────────
+function toggleHowItWorks(e) {
+  e.preventDefault();
+  const panel = document.getElementById('howItWorksPanel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function scrollToShortlist(e) {
+  e.preventDefault();
+  const sidebar = document.getElementById('sidebarPanel');
+  if (sidebar && sidebar.style.display !== 'none') {
+    sidebar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    // not yet visible — scroll to import section so user knows to start there
+    document.querySelector('.import-strip').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// Close how-it-works panel when clicking outside
+document.addEventListener('click', e => {
+  const panel = document.getElementById('howItWorksPanel');
+  if (panel && panel.style.display !== 'none') {
+    if (!panel.contains(e.target) && !e.target.closest('.nav-links')) {
+      panel.style.display = 'none';
+    }
+  }
+});
+
+// ── Progress ───────────────────────────────────────
+function updateProgress() {
+  let p = 0;
+  if (liConnections.length > 0 || xFollowing.length > 0) p += 34;
+  if ((document.getElementById('goalInput').value||'').trim().length > 10) p += 33;
+  if (results.length > 0) p = 100;
+  document.getElementById('importProgress').style.width = p + '%';
+}
+
+// ── Platform toggle ────────────────────────────────
+function setPlatform(btn) {
+  document.querySelectorAll('.ptoggle-btn').forEach(b => b.className = 'ptoggle-btn');
+  activePlatform = btn.dataset.p;
+  if (activePlatform === 'linkedin') btn.classList.add('active-li');
+  else if (activePlatform === 'x') btn.classList.add('active-x');
+  else btn.classList.add('active-both');
+}
+
+// ── Mode ───────────────────────────────────────────
+function setMode(m) {
+  activeMode = m;
+  document.getElementById('modeImport').classList.toggle('active', m === 'import');
+  document.getElementById('modeAI').classList.toggle('active', m === 'ai');
+  document.getElementById('modeHint').innerHTML = m === 'import'
+    ? '<strong>My network mode:</strong> Nexus ranks people you already follow by how relevant they are to your goal. Import your data above first.'
+    : '<strong>AI suggestions mode:</strong> No import needed. Nexus generates representative personas of people you should actively seek out, based on your goal.';
+}
+
+// ── Howto ──────────────────────────────────────────
+function toggleHowto(id, btn) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  btn.textContent = el.classList.contains('open') ? btn.textContent.replace('+','-') : btn.textContent.replace('-','+');
+}
+
+// ── Filter chip state (all multi-select arrays) ────
+const chipState = {
+  intent:    ['collab'],
+  stage:     [],
+  industry:  [],
+  geo:       [],
+  audience:  [],
+  expertise: []
+};
+
+function selectChip(btn) {
+  const group = btn.dataset.group;
+  const val   = btn.dataset.val;
+  const arr   = chipState[group];
+  const idx   = arr.indexOf(val);
+  if (idx >= 0) {
+    if (group === 'intent' && arr.length === 1) return; // keep at least one intent
+    arr.splice(idx, 1);
+    btn.classList.remove('selected');
+  } else {
+    arr.push(val);
+    btn.classList.add('selected');
+  }
+  updateFilterCount();
+}
+
+function updateFilterCount() {
+  const total = Object.values(chipState).reduce((s, a) => s + a.length, 0);
+  const el = document.getElementById('filterCount');
+  el.textContent = total;
+  el.classList.toggle('show', total > 0);
+}
+
+function toggleFilters() {
+  const body = document.getElementById('filterBody');
+  const icon = document.getElementById('filterToggleIcon');
+  body.classList.toggle('collapsed');
+  icon.textContent = body.classList.contains('collapsed') ? 'expand ▾' : 'collapse ▴';
+}
+
+function buildFilterSummary() {
+  const parts = [];
+  if (chipState.intent.length)    parts.push('Intent: '    + chipState.intent.join(', '));
+  if (chipState.stage.length)     parts.push('Stage: '     + chipState.stage.join(', '));
+  if (chipState.industry.length)  parts.push('Industry: '  + chipState.industry.join(', '));
+  if (chipState.geo.length)       parts.push('Geography: ' + chipState.geo.join(', '));
+  if (chipState.audience.length)  parts.push('Audience: '  + chipState.audience.join(', '));
+  if (chipState.expertise.length) parts.push('Expertise: ' + chipState.expertise.join(', '));
+  return parts.join(' | ') || 'No filters set';
+}
+
+// ── Tags ───────────────────────────────────────────
+function handleTagKey(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    const val = e.target.value.trim().replace(/,$/,'');
+    if (val && !tags.includes(val)) { tags.push(val); renderTags(); }
+    e.target.value = '';
+  }
+}
+function removeTag(t) { tags = tags.filter(x => x !== t); renderTags(); }
+function renderTags() {
+  const row = document.getElementById('tagRow');
+  const input = document.getElementById('tagInput');
+  row.innerHTML = '';
+  tags.forEach(t => {
+    const el = document.createElement('span');
+    el.className = 'tag';
+    el.innerHTML = `${escHtml(t)} <span class="remove" onclick="removeTag('${escHtml(t)}')">×</span>`;
+    row.appendChild(el);
+  });
+  row.appendChild(input);
+}
+
+// ── LinkedIn CSV ───────────────────────────────────
+function handleLiFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { liConnections = parseLiCSV(ev.target.result); updateLiUI(); updateProgress(); };
+  reader.readAsText(file);
+}
+
+const liDrop = document.getElementById('liDropZone');
+liDrop.addEventListener('dragover', e => { e.preventDefault(); liDrop.classList.add('drag-over'); });
+liDrop.addEventListener('dragleave', () => liDrop.classList.remove('drag-over'));
+liDrop.addEventListener('drop', e => {
+  e.preventDefault(); liDrop.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { liConnections = parseLiCSV(ev.target.result); updateLiUI(); updateProgress(); };
+  reader.readAsText(file);
+});
+
+function parseLiCSV(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  let headerIdx = 0;
+  for (let i = 0; i < Math.min(6, lines.length); i++) {
+    if (lines[i].toLowerCase().includes('first name') || lines[i].toLowerCase().includes('firstname')) { headerIdx = i; break; }
+  }
+  const headers = parseCSVRow(lines[headerIdx]).map(h => h.toLowerCase().trim());
+  const idx = (...names) => { for (const n of names) { const i = headers.findIndex(h => h.includes(n)); if (i >= 0) return i; } return -1; };
+  const fi = idx('first name','firstname'), li = idx('last name','lastname');
+  const ci = idx('company','employer','organization'), pi = idx('position','title','job title','role');
+  const people = [];
+  for (let i = headerIdx + 1; i < lines.length; i++) {
+    const cols = parseCSVRow(lines[i]);
+    if (!cols.length) continue;
+    const first = fi >= 0 ? (cols[fi]||'').trim() : '';
+    const last  = li >= 0 ? (cols[li]||'').trim() : '';
+    const name  = [first, last].filter(Boolean).join(' ');
+    const company  = ci >= 0 ? (cols[ci]||'').trim() : '';
+    const position = pi >= 0 ? (cols[pi]||'').trim() : '';
+    if (!name && !company) continue;
+    people.push({ name, company, position, source: 'linkedin' });
+  }
+  return people;
+}
+
+function parseCSVRow(line) {
+  const result = []; let current = ''; let inQ = false;
+  for (const ch of line) {
+    if (ch === '"') { inQ = !inQ; }
+    else if (ch === ',' && !inQ) { result.push(current); current = ''; }
+    else { current += ch; }
+  }
+  result.push(current);
+  return result.map(s => s.replace(/^"|"$/g,'').trim());
+}
+
+function updateLiUI() {
+  const n = liConnections.length;
+  document.getElementById('liCount').textContent = n + ' loaded';
+  document.getElementById('liCount').style.display = 'block';
+  document.getElementById('liDropZone').classList.add('loaded');
+  document.getElementById('liDropText').innerHTML = `<div class="drop-loaded-text">✓ ${n} connections imported</div>`;
+  document.getElementById('liPanel').classList.add('has-data');
+  const companies = new Set(liConnections.map(p => p.company).filter(Boolean));
+  const roles = new Set(liConnections.map(p => p.position).filter(Boolean));
+  document.getElementById('liTotal').textContent = n;
+  document.getElementById('liCompanies').textContent = companies.size;
+  document.getElementById('liRoles').textContent = roles.size;
+  document.getElementById('liStats').style.display = 'block';
+  document.getElementById('liPillCount').textContent = n;
+  document.getElementById('liPill').classList.remove('pill-hide');
+}
+
+// ── X parser ───────────────────────────────────────
+function parseXHandles() {
+  const raw = document.getElementById('xPasteInput').value.trim();
+  if (!raw) return;
+  xFollowing = [];
+  raw.split('\n').map(l => l.trim()).filter(Boolean).forEach(line => {
+    const hm = line.match(/@([\w]+)/);
+    const handle = hm ? '@' + hm[1] : '';
+    const rest = line.replace(/@[\w]+/,'').trim();
+    let name = '', bio = '';
+    if (rest.includes(' | ')) { const p = rest.split(' | '); name = p[0].trim(); bio = p.slice(1).join(' | ').trim(); }
+    else if (rest.includes(' - ')) { const p = rest.split(' - '); name = p[0].trim(); bio = p.slice(1).join(' - ').trim(); }
+    else { name = rest.split(' ').slice(0,4).join(' '); bio = rest.split(' ').slice(4).join(' '); }
+    if (handle || name) xFollowing.push({ handle, name: name || handle, bio, source: 'x' });
+  });
+  const n = xFollowing.length;
+  const withBio = xFollowing.filter(p => p.bio && p.bio.length > 8).length;
+  document.getElementById('xCount').textContent = n + ' loaded';
+  document.getElementById('xCount').style.display = 'block';
+  document.getElementById('xPanel').classList.add('has-data');
+  document.getElementById('xTotal').textContent = n;
+  document.getElementById('xWithBio').textContent = withBio;
+  document.getElementById('xStats').style.display = 'block';
+  document.getElementById('xPillCount').textContent = n;
+  document.getElementById('xPill').classList.remove('pill-hide');
+  document.getElementById('xPasteInput').style.borderColor = 'rgba(74,222,128,0.5)';
+  updateProgress();
+}
+
+// ── Network context ────────────────────────────────
+function buildNetworkCtx() {
+  const parts = [];
+  if ((activePlatform === 'both' || activePlatform === 'linkedin') && liConnections.length) {
+    const lines = liConnections.slice(0,100).map(p => `${p.name}${p.position ? ', '+p.position : ''}${p.company ? ' at '+p.company : ''}`).join('\n');
+    parts.push(`LINKEDIN CONNECTIONS (${liConnections.length} total):\n${lines}`);
+  }
+  if ((activePlatform === 'both' || activePlatform === 'x') && xFollowing.length) {
+    const lines = xFollowing.slice(0,80).map(p => `${p.handle}${p.name ? ' ('+p.name+')' : ''}${p.bio ? ': '+p.bio : ''}`).join('\n');
+    parts.push(`X FOLLOWING (${xFollowing.length} total):\n${lines}`);
+  }
+  return parts.join('\n\n');
+}
+
+function hasData() {
+  if (activePlatform === 'linkedin') return liConnections.length > 0;
+  if (activePlatform === 'x') return xFollowing.length > 0;
+  return liConnections.length > 0 || xFollowing.length > 0;
+}
+
+// ── Search ─────────────────────────────────────────
+async function runSearch() {
+  const goal = document.getElementById('goalInput').value.trim();
+  if (!goal) { document.getElementById('goalInput').focus(); return; }
+  if (activeMode === 'import' && !hasData()) {
+    alert('Please import your LinkedIn CSV or X following list first, or switch to AI suggestions mode.');
+    return;
+  }
+
+  const btn = document.getElementById('searchBtn');
+  btn.classList.add('loading');
+  document.getElementById('spinner').style.display = 'block';
+  document.getElementById('btnText').textContent = 'Analyzing...';
+  document.getElementById('resultsArea').innerHTML = buildSkeletons(6);
+
+  const context = document.getElementById('contextInput').value.trim();
+  const filterSummary = buildFilterSummary();
+  const networkCtx = activeMode === 'import' ? buildNetworkCtx() : '';
+  const isReal = activeMode === 'import' && networkCtx.length > 0;
+
+  const systemPrompt = isReal
+    ? `You are a networking intelligence engine. The user provides their real LinkedIn connections and/or X following list plus a goal. Identify which people from their actual network are most relevant to their goal and rank them.
+
+Return ONLY valid JSON:
+{
+  "profiles": [{
+    "id": "p1",
+    "name": "Exact name from the data",
+    "handle": "@handle or empty string",
+    "platform": "linkedin or x or both",
+    "title": "role from data or inferred",
+    "bio": "What you know about them from the imported data.",
+    "tags": ["tag1","tag2"],
+    "followers": "N/A",
+    "connections": "1st",
+    "relevanceScore": 88,
+    "relevanceReason": "Specific one-sentence reason this person fits the goal.",
+    "avatarColor": "#hexcolor",
+    "avatarInitials": "AB",
+    "mutualConnections": 0
+  }],
+  "insights": [{"icon":"emoji","text":"Insight about the network."}],
+  "summary": "One sentence on what was found."
+}
+Rules: only use people from the provided data, pick top 8, honest scores (85+ for genuine matches), exactly 3 insights about network composition. No markdown, only JSON.`
+    : `You are a networking intelligence engine. Generate 8 realistic representative personas the user should actively seek out.
+
+Return ONLY valid JSON:
+{
+  "profiles": [{
+    "id": "p1",
+    "name": "Realistic full name",
+    "handle": "@handle",
+    "platform": "linkedin or x or both",
+    "title": "Their role",
+    "bio": "2-sentence bio.",
+    "tags": ["tag1","tag2"],
+    "followers": "12.4K",
+    "connections": "3rd+",
+    "relevanceScore": 91,
+    "relevanceReason": "Why this persona type fits the goal.",
+    "avatarColor": "#hexcolor",
+    "avatarInitials": "AB",
+    "mutualConnections": 2
+  }],
+  "insights": [{"icon":"emoji","text":"Networking landscape insight."}],
+  "summary": "One sentence summary."
+}
+Rules: diverse personas, scores 72-97, exactly 3 insights, no markdown, only JSON.`;
+
+  let userMsg = `Goal: ${goal}\n`;
+  if (context) userMsg += `Context: ${context}\n`;
+  userMsg += `Filters: ${filterSummary}\n`;
+  if (tags.length) userMsg += `Keywords: ${tags.join(', ')}\n`;
+  if (isReal) userMsg += `\n${networkCtx}`;
+
+  try {
+    const resp = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+    const data = await resp.json();
+    const raw = data.content.map(i => i.text || '').join('');
+    const parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    results = (parsed.profiles || []).map(p => ({ ...p, isReal }));
+    renderResults(parsed, isReal);
+    renderInsights(parsed.insights || []);
+    updateProgress();
+  } catch (err) {
+    document.getElementById('resultsArea').innerHTML = `<div class="results-placeholder"><div class="placeholder-icon">⚠</div><div class="placeholder-text">Something went wrong. Please try again.<br><small style="opacity:.4">${err.message}</small></div></div>`;
+  }
+
+  btn.classList.remove('loading');
+  document.getElementById('spinner').style.display = 'none';
+  document.getElementById('btnText').textContent = 'Run Discovery Engine';
+}
+
+// ── Render ─────────────────────────────────────────
+function buildSkeletons(n) {
+  let html = '<div class="results-grid">';
+  for (let i = 0; i < n; i++) {
+    html += `<div class="skel-card" style="animation-delay:${i*80}ms">
+      <div style="display:flex;gap:14px;margin-bottom:16px;align-items:center">
+        <div class="skel" style="width:48px;height:48px;border-radius:50%;flex-shrink:0"></div>
+        <div style="flex:1">
+          <div class="skel skel-line s80"></div>
+          <div class="skel skel-line s60"></div>
+        </div>
+      </div>
+      <div class="skel skel-line s100"></div>
+      <div class="skel skel-line s80" style="margin-top:0"></div>
+      <div class="skel skel-line s60" style="margin-top:16px"></div>
+    </div>`;
+  }
+  return html + '</div>';
+}
+
+function renderResults(parsed, isReal) {
+  const profiles = parsed.profiles || [];
+  const summary  = parsed.summary || '';
+  const srcTag = isReal
+    ? '<span class="source-tag source-real">from your network</span>'
+    : '<span class="source-tag source-ai">AI generated</span>';
+
+  // Network summary stats
+  const avgScore = profiles.length ? Math.round(profiles.reduce((s,p) => s + p.relevanceScore, 0) / profiles.length) : 0;
+  const topMatch = profiles.length ? Math.max(...profiles.map(p => p.relevanceScore)) : 0;
+  const platforms = [...new Set(profiles.map(p => p.platform))].join(', ');
+  const industries = [...new Set(profiles.flatMap(p => p.tags||[]))].slice(0,3).join(', ');
+
+  let html = `
+  <div class="network-summary">
+    <div class="ns-stat"><span class="ns-val">${profiles.length}</span><span class="ns-lbl">Profiles Found</span></div>
+    <div class="ns-stat"><span class="ns-val">${avgScore}%</span><span class="ns-lbl">Avg Relevance</span></div>
+    <div class="ns-stat"><span class="ns-val">${topMatch}%</span><span class="ns-lbl">Top Match</span></div>
+    <div class="ns-stat"><span class="ns-val">${profiles.filter(p=>p.relevanceScore>=88).length}</span><span class="ns-lbl">High Matches</span></div>
+  </div>
+  <div class="results-header">
+    <span class="results-meta"><strong>${profiles.length}</strong> profiles found ${srcTag}${summary ? ' &nbsp;' + escHtml(summary) : ''}</span>
+    <select class="sort-select" onchange="sortResults(this.value)">
+      <option value="relevance">Sort: Relevance</option>
+      <option value="followers">Sort: Followers</option>
+      <option value="mutual">Sort: Mutual</option>
+    </select>
+  </div>
+  <div class="results-grid" id="resultsGrid">`;
+
+  profiles.forEach((p, i) => { html += buildCard(p, i); });
+  html += '</div>';
+  document.getElementById('resultsArea').innerHTML = html;
+  document.getElementById('sidebarPanel').style.display = 'block';
+}
+
+function buildCard(p, i) {
+  const delay = i * 60;
+  const rc = p.relevanceScore >= 88 ? 'rel-high' : p.relevanceScore >= 78 ? 'rel-medium' : 'rel-low';
+  const pulse = p.relevanceScore >= 92 ? 'pulse' : '';
+  const pc = p.platform === 'x' ? 'plat-x' : 'plat-li';
+  const pip = p.platform === 'x'
+    ? `<div class="platform-pip pip-x" style="font-size:9px">𝕏</div>`
+    : `<div class="platform-pip pip-li">in</div>`;
+  const color = p.avatarColor || '#63d2ff';
+  const inits = p.avatarInitials || (p.name||'NA').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const tagsHtml = (p.tags||[]).map(t=>`<span class="person-tag">${escHtml(t)}</span>`).join('');
+
+  return `<div class="person-card ${pc}" style="animation-delay:${delay}ms" id="card-${p.id}">
+    <div class="person-top">
+      <div class="avatar" style="background:${color}20;color:${color}">${escHtml(inits)}${pip}</div>
+      <div class="person-info">
+        <div class="person-name">${escHtml(p.name)}</div>
+        <div class="person-handle">${escHtml(p.handle||'')}</div>
+        <div class="person-title">${escHtml(p.title||'')}</div>
+      </div>
+      <span class="relevance-badge ${rc} ${pulse}">${p.relevanceScore}%</span>
+    </div>
+    ${p.relevanceReason ? `<div class="reason-box">${escHtml(p.relevanceReason)}</div>` : ''}
+    <p class="person-bio">${escHtml(p.bio||'')}</p>
+    <div class="person-tags">${tagsHtml}</div>
+    <div class="person-stats">
+      <div class="stat"><span class="stat-val">${escHtml(p.followers||(p.isReal?'1st':'N/A'))}</span><span class="stat-label">Followers</span></div>
+      ${p.mutualConnections ? `<div class="stat"><span class="stat-val">${p.mutualConnections}</span><span class="stat-label">Mutual</span></div>` : ''}
+      <div class="stat"><span class="stat-val">${escHtml(p.connections||(p.isReal?'1st':'3rd+'))}</span><span class="stat-label">Distance</span></div>
+    </div>
+    <div class="card-actions">
+    <button class="card-btn saved-btn" id="save-${p.id}" onclick="savePerson('${p.id}')">Save to Shortlist</button>
+    <button class="card-btn" onclick="openOutreach('${p.id}')">Write Outreach</button>
+  </div>`;
+}
+
+function savePerson(id) {
+  const profile = results.find(p => p.id === id);
+  if (!profile) return;
+  const btn = document.getElementById(`save-${id}`);
+  if (savedPeople.find(p => p.id === id)) {
+    savedPeople = savedPeople.filter(p => p.id !== id);
+    btn.textContent = 'Save to Shortlist';
+    btn.classList.remove('saved');
+  } else {
+    savedPeople.push(profile);
+    btn.textContent = 'Saved';
+    btn.classList.add('saved');
+  }
+  renderSavedList();
+  updateShortlistExportBar();
+}
+
+function renderSavedList() {
+  const list = document.getElementById('savedList');
+  if (!savedPeople.length) { list.innerHTML = '<div class="empty-saved">No one saved yet.</div>'; updateShortlistExportBar(); return; }
+  list.innerHTML = savedPeople.map(p => {
+    const color = p.avatarColor || '#63d2ff';
+    const inits = p.avatarInitials || (p.name||'NA').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    return `<div class="saved-item">
+      <div class="saved-avatar" style="background:${color}20;color:${color}">${escHtml(inits)}</div>
+      <div class="saved-info">
+        <div class="saved-name">${escHtml(p.name)}</div>
+        <div class="saved-platform">${p.platform==='x'?'𝕏 X':'LinkedIn'} &middot; ${p.relevanceScore}% match</div>
+      </div>
+    </div>`;
+  }).join('');
+  updateShortlistExportBar();
+}
+
+function renderInsights(insights) {
+  const body = document.getElementById('insightBody');
+  if (!insights.length) { body.innerHTML = ''; return; }
+  body.innerHTML = insights.map(ins => `
+    <div class="insight-item">
+      <span class="insight-icon">${ins.icon||'○'}</span>
+      <span class="insight-text">${escHtml(ins.text)}</span>
+    </div>`).join('');
+}
+
+function sortResults(by) {
+  const sorted = [...results].sort((a,b) => {
+    if (by === 'relevance') return b.relevanceScore - a.relevanceScore;
+    if (by === 'mutual') return (b.mutualConnections||0) - (a.mutualConnections||0);
+    if (by === 'followers') {
+      const parse = s => parseFloat((s||'0').replace(/K/i,'e3').replace(/M/i,'e6'))||0;
+      return parse(b.followers) - parse(a.followers);
+    }
+    return 0;
+  });
+  const grid = document.getElementById('resultsGrid');
+  if (grid) grid.innerHTML = sorted.map((p,i) => buildCard(p,i)).join('');
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Shortlist export bar ───────────────────────────
+function updateShortlistExportBar() {
+  const body = document.getElementById('savedList');
+  const existing = document.getElementById('shortlistExportBar');
+  if (existing) existing.remove();
+  if (!savedPeople.length) return;
+  const bar = document.createElement('div');
+  bar.id = 'shortlistExportBar';
+  bar.className = 'export-bar';
+  bar.innerHTML = `
+    <span class="export-label">${savedPeople.length} person${savedPeople.length>1?'s':''} shortlisted</span>
+    <button class="export-btn" onclick="exportShortlistCSV()">Export CSV</button>
+    <button class="export-btn" onclick="copyShortlistText()">Copy All</button>
+    <button class="export-btn danger" onclick="clearShortlist()">Clear</button>`;
+  document.querySelector('.sidebar-card:last-child .sidebar-body').appendChild(bar);
+}
+
+function exportShortlistCSV() {
+  const rows = [['Name','Handle','Platform','Title','Relevance','Tags']];
+  savedPeople.forEach(p => {
+    rows.push([p.name, p.handle||'', p.platform, p.title||'', p.relevanceScore+'%', (p.tags||[]).join('; ')]);
+  });
+  const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'nexus-shortlist.csv';
+  a.click();
+}
+
+function copyShortlistText() {
+  const text = savedPeople.map(p =>
+    `${p.name}${p.handle ? ' ('+p.handle+')' : ''} — ${p.title||p.platform} — ${p.relevanceScore}% match`
+  ).join('\n');
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('#shortlistExportBar .export-btn:nth-child(3)');
+    if (btn) { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy All', 1800); }
+  });
+}
+
+function clearShortlist() {
+  savedPeople = [];
+  results.forEach(p => {
+    const btn = document.getElementById(`save-${p.id}`);
+    if (btn) { btn.textContent = 'Save to Shortlist'; btn.classList.remove('saved'); }
+  });
+  renderSavedList();
+  updateShortlistExportBar();
+}
+
+// ── Outreach modal ─────────────────────────────────
+let activeOutreachProfile = null;
+let activeOutreachTab = 'linkedin';
+let outreachCache = {};
+
+function openOutreach(id) {
+  const profile = results.find(p => p.id === id);
+  if (!profile) return;
+  activeOutreachProfile = profile;
+  activeOutreachTab = 'linkedin';
+  outreachCache = {};
+  document.getElementById('modalName').textContent = profile.name;
+  document.getElementById('modalRole').textContent = profile.title || profile.platform;
+  document.querySelectorAll('.mtab').forEach((t,i) => t.classList.toggle('active', i===0));
+  document.getElementById('outreachModal').style.display = 'flex';
+  generateOutreach();
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('outreachModal')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('outreachModal').style.display = 'none';
+  activeOutreachProfile = null;
+  outreachCache = {};
+}
+
+function switchTab(tab, btn) {
+  activeOutreachTab = tab;
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  if (outreachCache[tab]) {
+    document.getElementById('outreachContent').textContent = outreachCache[tab];
+  } else {
+    generateOutreach();
+  }
+}
+
+async function generateOutreach() {
+  const p = activeOutreachProfile;
+  if (!p) return;
+  const box = document.getElementById('outreachContent');
+  box.innerHTML = `<div class="outreach-loading"><div class="btn-spinner" style="display:block;border-color:rgba(99,210,255,.2);border-top-color:var(--accent);"></div> Generating message...</div>`;
+
+  const goal = document.getElementById('goalInput').value.trim();
+  const context = document.getElementById('contextInput').value.trim();
+  const channelMap = { linkedin: 'LinkedIn DM (300 chars max, warm and direct)', email: 'cold email (subject line + 4-sentence body)', x: 'X/Twitter DM (280 chars max, punchy)' };
+
+  try {
+    const resp = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        system: `You write sharp, personalised outreach messages. No em dashes. No generic openers like "Hope this finds you well." Be specific, human, and brief. Output only the message text, nothing else.`,
+        messages: [{ role: 'user', content: `Write a ${channelMap[activeOutreachTab]} to reach out to:
+Name: ${p.name}
+Role: ${p.title || 'unknown'}
+Bio: ${p.bio || 'unknown'}
+Why relevant: ${p.relevanceReason || ''}
+Tags: ${(p.tags||[]).join(', ')}
+
+Sender goal: ${goal}
+Sender context: ${context || 'not provided'}
+
+Write the message now. For email include Subject: on first line.` }]
+      })
+    });
+    const data = await resp.json();
+    const msg = (data.content||[]).map(i => i.text||'').join('').trim();
+    outreachCache[activeOutreachTab] = msg;
+    box.textContent = msg;
+  } catch (err) {
+    box.textContent = 'Could not generate message. Please try again.';
+  }
+}
+
+async function regenOutreach() {
+  delete outreachCache[activeOutreachTab];
+  await generateOutreach();
+}
+
+function copyOutreach() {
+  const text = document.getElementById('outreachContent').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.modal-actions .modal-btn:first-child');
+    if (btn) { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy Message', 1800); }
+  });
+}
+
+// ── Keyboard shortcut ──────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModalDirect();
+});
+
+document.getElementById('goalInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.metaKey) runSearch();
+  updateProgress();
+});
+</script>
+</body>
+</html>
