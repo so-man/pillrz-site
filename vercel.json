@@ -1,0 +1,4 @@
+{
+  "src": "/api/claude",
+  "dest": "/api/claude.js"
+}
