@@ -1,4 +1,9 @@
 {
-  "src": "/api/claude",
-  "dest": "/api/claude.js"
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/claude",
+      "dest": "/api/claude.js"
+    }
+  ]
 }
