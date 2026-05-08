@@ -122,16 +122,24 @@ const gs = document.getElementById('growth');
 if (gs) growthObs.observe(gs);
 
 
-// Products dropdown toggle
-const dropdownTrigger = document.querySelector('.nav-dropdown-trigger');
-const dropdown = document.querySelector('.nav-dropdown');
-if (dropdownTrigger && dropdown) {
-  dropdownTrigger.addEventListener('click', e => {
+
+// Products dropdown
+const ddTrigger = document.querySelector('.nav-dropdown-trigger');
+const ddMenu = document.querySelector('.nav-dropdown');
+if (ddTrigger && ddMenu) {
+  ddTrigger.addEventListener('click', function(e) {
     e.preventDefault();
-    dropdown.classList.toggle('open');
+    e.stopPropagation();
+    ddMenu.classList.toggle('open');
   });
-  document.addEventListener('click', e => {
-    if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+  document.addEventListener('click', function(e) {
+    if (!ddMenu.contains(e.target)) {
+      ddMenu.classList.remove('open');
+    }
+  });
+  // Keep open when clicking inside menu
+  document.querySelector('.nav-dropdown-menu').addEventListener('click', function(e) {
+    e.stopPropagation();
   });
 }
 
