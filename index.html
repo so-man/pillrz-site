@@ -122,7 +122,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .hero-content{position:relative;z-index:2;max-width:760px;text-align:center;margin:0 auto;}
 .hero-tag{font-size:0.78rem;letter-spacing:2px;color:var(--peach);margin-bottom:24px;font-weight:500;text-transform:uppercase;}
 .hero h1{font-family:var(--heading);color:var(--peach);font-size:clamp(2.8rem,6.5vw,4.8rem);line-height:1;margin-bottom:20px;text-transform:uppercase;}
-.metal-text{background:linear-gradient(135deg,#e8d5c4 0%,#fff8f0 15%,#c9a88a 30%,#f5e6d8 45%,#d4b89c 55%,#fff0e0 70%,#c4a07e 85%,#f0dcc8 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:brightness(1.1);}
+.metal-text{position:relative;-webkit-text-fill-color:transparent;background:linear-gradient(135deg,#1a1a1a 0%,#333 25%,#111 50%,#2a2a2a 75%,#0a0a0a 100%);-webkit-background-clip:text;background-clip:text;}
+.metal-text-canvas{position:absolute;top:0;left:0;width:100%;height:100%;mix-blend-mode:screen;pointer-events:none;}
 .hero-sub{font-size:1rem;line-height:1.7;color:rgba(255,220,190,0.65);max-width:500px;font-weight:300;margin-bottom:36px;margin-left:auto;margin-right:auto;}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;font-size:0.85rem;font-weight:700;text-decoration:none;font-family:var(--body);transition:all 0.3s;cursor:pointer;border:none;text-transform:uppercase;letter-spacing:0.5px;}
 .btn-light{background:var(--peach);color:var(--red);}
@@ -322,7 +323,7 @@ footer a:hover{color:var(--peach);}
   <canvas id="ptc"></canvas>
   <div class="hero-content">
     <p class="hero-tag rv">Growth Infrastructure for AI + Crypto</p>
-    <h1 class="rv rv-d1"><span style="font-size:0.85em">GROWTH AND DISTRIBUTION,</span> <span class="metal-text">SOLVED</span></h1>
+    <h1 class="rv rv-d1"><span style="font-size:0.85em">GROWTH AND DISTRIBUTION,</span> <span class="metal-text" id="solvedText">SOLVED<canvas class="metal-text-canvas" id="solvedCanvas"></canvas></span></h1>
     <p class="hero-sub rv rv-d2">Most projects fail at distribution, not product. We fix that. PILLRZ helps ambitious teams turn complex products into clear narratives and scalable growth systems.</p>
     <div class="hero-ctas rv rv-d3">
       <button class="btn btn-light" onclick="window.open('https://calendly.com/somanyadav139/pillrz-strategy','_blank')">Book a 15-min call</button>
@@ -608,6 +609,50 @@ const sObs=new IntersectionObserver(es=>{
   });
 },{threshold:0.5});
 statEls.forEach(el=>sObs.observe(el));
+
+/* SOLVED text motion graphics */
+(function(){
+  const el=document.getElementById('solvedText');
+  const cv=document.getElementById('solvedCanvas');
+  if(!el||!cv)return;
+  const ctx=cv.getContext('2d');
+  let particles=[];
+  function resize(){
+    const r=el.getBoundingClientRect();
+    cv.width=r.width;cv.height=r.height;
+  }
+  resize();window.addEventListener('resize',resize);
+  class P{
+    constructor(){this.reset();}
+    reset(){
+      this.x=Math.random()*cv.width;
+      this.y=Math.random()*cv.height;
+      this.vx=(Math.random()-0.5)*0.8;
+      this.vy=(Math.random()-0.5)*0.6;
+      this.r=Math.random()*2+0.5;
+      this.a=Math.random()*0.4+0.1;
+      this.color=Math.random()>0.5?'rgba(180,32,40,':'rgba(255,100,50,';
+    }
+    update(){
+      this.x+=this.vx;this.y+=this.vy;
+      this.a+=Math.sin(Date.now()*0.003+this.x)*0.005;
+      if(this.x<0||this.x>cv.width||this.y<0||this.y>cv.height)this.reset();
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle=this.color+Math.max(0.05,Math.min(0.5,this.a))+')';
+      ctx.fill();
+    }
+  }
+  for(let i=0;i<40;i++)particles.push(new P());
+  function loop(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    particles.forEach(p=>{p.update();p.draw();});
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
 </script>
 
 </body>
