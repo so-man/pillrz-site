@@ -39,13 +39,6 @@ img{display:block;max-width:100%}
 #bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;pointer-events:none;transform:translateZ(0)}
 main,footer{position:relative;z-index:1}
 
-/* cursor */
-.cur-dot,.cur-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:300;border-radius:50%;transform:translate(-50%,-50%)}
-.cur-dot{width:6px;height:6px;background:var(--accent);margin:-3px 0 0 -3px;transform:none}
-.cur-ring{width:36px;height:36px;margin:-18px 0 0 -18px;border:1px solid rgba(200,255,0,.5);transform:none;transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease),background .35s,border-color .35s}
-.cur-ring.big{width:72px;height:72px;margin:-36px 0 0 -36px;background:rgba(200,255,0,.08);border-color:rgba(200,255,0,.8)}
-@media (hover:none){.cur-dot,.cur-ring{display:none}}
-
 /* progress + nav */
 .progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--accent);transform-origin:left;transform:scaleX(0);z-index:200}
 nav{position:fixed;top:0;left:0;right:0;z-index:150;padding:16px var(--pad);display:flex;align-items:center;justify-content:space-between;transition:transform .5s var(--ease),background .4s,border-color .4s;border-bottom:1px solid transparent}
@@ -205,8 +198,8 @@ section{position:relative}
 .team{display:grid;grid-template-columns:repeat(2,minmax(0,340px));gap:18px;margin-top:clamp(40px,6vw,72px)}
 .member{padding:14px 14px 22px}
 .photo{border-radius:14px;overflow:hidden;aspect-ratio:1/1.08;background:#111}
-.photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);transform:scale(1.04);transition:filter .7s,transform 1s var(--ease)}
-.member:hover .photo img{filter:none;transform:scale(1)}
+.photo img{width:100%;height:100%;object-fit:cover;transform:scale(1.02);transition:transform 1s var(--ease)}
+.member:hover .photo img{transform:scale(1.06)}
 .m-name{font-family:var(--h);font-weight:700;font-size:1.3rem;margin:18px 8px 2px}
 .m-role{color:var(--dim);font-size:.9rem;margin:0 8px}
 .m-links{display:flex;gap:16px;margin:14px 8px 0}
@@ -261,7 +254,6 @@ footer small{color:var(--faint);font-size:.8rem}
 </head>
 <body>
 <canvas id="bg" aria-hidden="true"></canvas>
-<div class="cur-ring" aria-hidden="true"></div><div class="cur-dot" aria-hidden="true"></div>
 <div class="progress" aria-hidden="true"></div>
 
 <nav id="nav">
@@ -1054,11 +1046,6 @@ lenis.on('scroll', ({ scroll, direction, limit }) => {
 $('#burger').addEventListener('click', () => { $('#burger').classList.toggle('open'); $('#mob').classList.toggle('open'); });
 
 if (!TOUCH) {
-  const dot = $('.cur-dot'), ring = $('.cur-ring');
-  const dx = gsap.quickTo(dot, 'x', { duration: .12, ease: 'power3' }), dy = gsap.quickTo(dot, 'y', { duration: .12, ease: 'power3' });
-  const rx = gsap.quickTo(ring, 'x', { duration: .5, ease: 'power3' }), ry = gsap.quickTo(ring, 'y', { duration: .5, ease: 'power3' });
-  addEventListener('pointermove', e => { dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY); });
-  $$('a,button,.glass,.logo-card').forEach(el => { el.addEventListener('pointerenter', () => ring.classList.add('big')); el.addEventListener('pointerleave', () => ring.classList.remove('big')); });
   $$('.magnetic').forEach(el => {
     const xT = gsap.quickTo(el, 'x', { duration: .8, ease: 'elastic.out(1,0.4)' }), yT = gsap.quickTo(el, 'y', { duration: .8, ease: 'elastic.out(1,0.4)' });
     const str = el.classList.contains('cta-btn') ? .22 : .3;
