@@ -21,7 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#0a0a0a; --text:#ededed; --dim:rgba(237,237,237,.6); --faint:rgba(237,237,237,.32);
+  --bg:#0a0a0a; --text:#ededed; --dim:rgba(237,237,237,.76); --faint:rgba(237,237,237,.48);
   --accent:#c8ff00; --accent-12:rgba(200,255,0,.12); --border:rgba(255,255,255,.09);
   --h:'Space Grotesk',system-ui,sans-serif; --b:'Inter',system-ui,sans-serif;
   --ease:cubic-bezier(.22,1,.36,1); --pad:clamp(16px,4vw,48px);
@@ -82,7 +82,7 @@ section{position:relative}
 .eyebrow .pdot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(200,255,0,.6);animation:ping 2s infinite}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(200,255,0,.55)}80%,100%{box-shadow:0 0 0 12px rgba(200,255,0,0)}}
 .h2{font-family:var(--h);font-weight:700;font-size:clamp(2.4rem,6vw,5rem);letter-spacing:-.035em;line-height:1;margin-top:14px}
-.lead{color:var(--dim);font-weight:300;font-size:clamp(1rem,1.3vw,1.12rem);line-height:1.65;max-width:560px;margin-top:18px}
+.lead{color:var(--dim);font-weight:400;font-size:clamp(1.02rem,1.3vw,1.15rem);line-height:1.7;max-width:560px;margin-top:18px}
 .sec{padding:clamp(96px,14vw,180px) 0}
 .split .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em}
 .split .w>span{display:inline-block}
@@ -91,13 +91,16 @@ section{position:relative}
 .glass:hover{border-color:rgba(200,255,0,.32)}
 .glass:hover::before{opacity:1}
 
+/* legibility over the animated background */
+.lead,.hero-sub,.cta p,.cl-lab,.svc-desc,.svc-bullets li{text-shadow:0 1px 14px rgba(10,10,10,.85),0 0 2px rgba(10,10,10,.6)}
+
 /* hero */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:130px 0 90px}
 .hero h1{font-family:var(--h);font-weight:700;font-size:clamp(2.45rem,9.2vw,8.6rem);line-height:.94;letter-spacing:-.045em;margin-top:26px}
 .hero h1 .line{display:block;overflow:hidden;padding-bottom:.04em}
 .hero h1 .line>span{display:inline-block}
 .hero h1 .accent{color:var(--accent)}
-.hero-sub{color:var(--dim);font-weight:300;font-size:clamp(1.02rem,1.4vw,1.2rem);line-height:1.65;max-width:520px;margin-top:30px}
+.hero-sub{color:var(--dim);font-weight:400;font-size:clamp(1.02rem,1.4vw,1.2rem);line-height:1.65;max-width:520px;margin-top:30px}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:40px}
 .hero-foot{position:absolute;left:0;right:0;bottom:28px}
 .hero-foot .wrap{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--faint);letter-spacing:.06em}
@@ -135,9 +138,9 @@ section{position:relative}
 .svc-item.active .svc-plus svg{stroke:#0a0a0a}
 .svc-body{height:0;overflow:hidden}
 .svc-body-in{padding:12px 0 4px 44px}
-.svc-desc{color:var(--dim);font-weight:300;line-height:1.6;font-size:.96rem}
+.svc-desc{color:var(--dim);font-weight:400;line-height:1.65;font-size:1rem}
 .svc-bullets{list-style:none;margin-top:12px;display:grid;gap:7px}
-.svc-bullets li{font-size:.88rem;color:var(--text);opacity:.85;display:flex;gap:10px;align-items:baseline}
+.svc-bullets li{font-size:.94rem;color:var(--text);opacity:.92;display:flex;gap:10px;align-items:baseline}
 .svc-bullets li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);flex:none;transform:translateY(-2px)}
 .svc-bar{height:2px;background:var(--border);margin-top:14px;overflow:hidden;border-radius:2px;opacity:0;transition:opacity .5s}
 .svc-item.active .svc-bar{opacity:1}
@@ -157,7 +160,7 @@ section{position:relative}
 .cl-stats{display:grid;gap:clamp(28px,4vw,44px)}
 .cl-num{font-family:var(--h);font-weight:700;font-size:clamp(3rem,6vw,5.2rem);letter-spacing:-.04em;line-height:1}
 .cl-num em{font-style:normal;color:var(--accent)}
-.cl-lab{color:var(--dim);font-weight:300;margin-top:6px}
+.cl-lab{color:var(--dim);font-weight:400;margin-top:6px}
 .logos{display:grid;grid-template-columns:1fr 1fr;gap:14px;height:520px;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent)}
 .lcol{display:flex;flex-direction:column;gap:14px}
 .lcol.up{animation:up 26s linear infinite}
@@ -167,7 +170,7 @@ section{position:relative}
 @keyframes down{from{transform:translateY(calc(-50% - 7px))}to{transform:translateY(0)}}
 .logo-card{height:118px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:18px}
 .logo-card img{height:46px;width:auto;max-width:150px;object-fit:contain;filter:grayscale(1) brightness(1.6);opacity:.75;transition:filter .5s,opacity .5s,transform .6s var(--ease)}
-.logo-card span{font-size:.72rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;transition:color .4s}
+.logo-card span{font-size:.74rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;transition:color .4s}
 .logo-card:hover img{filter:none;opacity:1;transform:scale(1.08)}
 .logo-card img.inv{filter:invert(1) grayscale(1) brightness(1.1)}
 .logo-card:hover img.inv{filter:invert(1)}
@@ -179,7 +182,7 @@ section{position:relative}
 .case.wide{grid-column:1/-1;min-height:240px}
 .case-tag{align-self:flex-start;font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-12);border:1px solid rgba(200,255,0,.25);padding:6px 12px;border-radius:999px}
 .case-name{font-family:var(--h);font-weight:700;font-size:clamp(1.6rem,2.6vw,2.2rem);letter-spacing:-.02em}
-.case p{color:var(--dim);font-weight:300;line-height:1.65;font-size:.95rem}
+.case p{color:var(--dim);font-weight:400;line-height:1.7;font-size:1rem}
 .case-out{margin-top:auto;padding-top:18px;border-top:1px solid var(--border);font-family:var(--h);font-weight:600;font-size:1.1rem;color:var(--accent);display:flex;align-items:center;gap:10px}
 
 /* products */
@@ -190,7 +193,7 @@ section{position:relative}
 .badge{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 11px;border-radius:999px}
 .badge.free{background:var(--accent);color:#0a0a0a}
 .badge.beta{border:1px solid rgba(255,255,255,.25);color:var(--dim)}
-.prod p{color:var(--dim);font-weight:300;line-height:1.65}
+.prod p{color:var(--dim);font-weight:400;line-height:1.7;font-size:1rem}
 .prod ul{list-style:none;display:grid;gap:10px}
 .prod li{display:flex;gap:10px;font-size:.92rem;align-items:baseline}
 .prod li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);flex:none;transform:translateY(-2px)}
@@ -207,7 +210,7 @@ section{position:relative}
 .m-name{font-family:var(--h);font-weight:700;font-size:1.3rem;margin:18px 8px 2px}
 .m-role{color:var(--dim);font-size:.9rem;margin:0 8px}
 .m-links{display:flex;gap:16px;margin:14px 8px 0}
-.m-links a{font-size:.82rem;color:var(--faint);transition:color .3s}
+.m-links a{font-size:.86rem;color:var(--dim);transition:color .3s}
 .m-links a:hover{color:var(--accent)}
 
 /* cta */
@@ -215,9 +218,14 @@ section{position:relative}
 .cta .wrap{display:flex;flex-direction:column;align-items:center}
 .cta h2{font-family:var(--h);font-weight:700;font-size:clamp(3.2rem,11vw,10rem);letter-spacing:-.05em;line-height:.92}
 .cta h2 .accent{color:var(--accent)}
-.cta p{color:var(--dim);font-weight:300;max-width:480px;line-height:1.65;margin-top:26px}
-.cta-btn{margin-top:46px;width:180px;height:180px;border-radius:50%;background:var(--accent);color:#0a0a0a;display:grid;place-items:center;font-family:var(--h);font-weight:700;font-size:1.05rem;line-height:1.2;text-align:center;box-shadow:0 0 0 0 rgba(200,255,0,.35);transition:box-shadow .5s;will-change:transform}
-.cta-btn:hover{box-shadow:0 0 0 18px rgba(200,255,0,.1),0 0 80px rgba(200,255,0,.35)}
+.cta p{color:var(--dim);font-weight:400;font-size:1.08rem;max-width:500px;line-height:1.7;margin-top:26px}
+.cta-btn{margin-top:44px;display:inline-flex;align-items:center;gap:18px;padding:9px 9px 9px 32px;border-radius:999px;background:var(--accent);color:#0a0a0a;font-family:var(--h);font-weight:600;font-size:clamp(1.05rem,1.4vw,1.22rem);letter-spacing:-.01em;transition:background .3s,box-shadow .5s;will-change:transform}
+.cta-btn:hover{background:#d6ff3d;box-shadow:0 12px 44px rgba(200,255,0,.22)}
+.cta-arrow{width:50px;height:50px;border-radius:50%;background:#0a0a0a;color:var(--accent);display:grid;place-items:center;transition:transform .5s var(--ease)}
+.cta-arrow svg{width:18px;height:18px}
+.cta-btn:hover .cta-arrow{transform:rotate(-45deg)}
+.cta-mail{margin-top:20px;font-size:.95rem;color:var(--dim);border-bottom:1px solid rgba(237,237,237,.25);padding-bottom:2px;transition:color .3s,border-color .3s}
+.cta-mail:hover{color:var(--accent);border-color:var(--accent)}
 
 /* footer */
 footer{border-top:1px solid var(--border);background:rgba(10,10,10,.7)}
@@ -240,14 +248,14 @@ footer small{color:var(--faint);font-size:.8rem}
   .svc-list{margin-top:0}
   .svc-bullets{display:none}
   .svc-body-in{padding:8px 0 2px 44px}
-  .svc-desc{font-size:.88rem}
+  .svc-desc{font-size:.92rem}
   .stage-chip{top:12px;left:12px;font-size:.72rem;padding:7px 12px}
   .cl-grid,.cases,.prods{grid-template-columns:1fr}
   .logos{height:400px}
   .team{grid-template-columns:1fr 1fr}
   .hero-foot .hint{display:none}
 }
-@media (max-width:520px){ .team{grid-template-columns:1fr} .cta-btn{width:150px;height:150px} }
+@media (max-width:520px){ .team{grid-template-columns:1fr} }
 @media (prefers-reduced-motion:reduce){ .lcol{animation:none!important} .scroll-cue i,.eyebrow .pdot{animation:none} }
 </style>
 </head>
@@ -444,7 +452,8 @@ footer small{color:var(--faint);font-size:.8rem}
     <p class="eyebrow reveal"><span class="pdot"></span>Let's talk</p>
     <h2 class="split" style="margin-top:22px">Ready to <span class="accent">grow?</span></h2>
     <p class="reveal">Tell us about your project. 15 minutes, no pitch decks, just a real conversation about what you need.</p>
-    <a class="cta-btn magnetic reveal" href="https://calendly.com/somanyadav139/pillrz-strategy" target="_blank" rel="noopener">Book<br/>a call</a>
+    <a class="cta-btn magnetic reveal" href="https://calendly.com/somanyadav139/pillrz-strategy" target="_blank" rel="noopener"><span>Book a 15-min call</span><span class="cta-arrow"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h12M10 4l5 5-5 5"/></svg></span></a>
+    <a class="cta-mail reveal" href="mailto:soman@pillrz.com">or email soman@pillrz.com</a>
   </div>
 </section>
 </main>
@@ -547,7 +556,7 @@ bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMateri
       vec3 teal = vec3(0.04, 0.32, 0.27);
       vec3 col = vec3(0.039);
       float cloud = smoothstep(0.42, 1.0, n);
-      col += mix(teal, lime*0.9, smoothstep(0.55, 0.98, n)) * cloud * (0.07 + 0.15*uInt);
+      col += mix(teal, lime*0.9, smoothstep(0.55, 0.98, n)) * cloud * (0.045 + 0.17*uInt);
       col += lime * 0.07 * uInt * exp(-length(p - vec2(asp*0.86, 1.02))*1.7);
       col += teal * 0.25 * exp(-length(p - vec2(asp*0.08, -0.05))*2.2) * (0.4 + 0.6*uInt);
       float md = length(p - m);
@@ -571,7 +580,7 @@ bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMateri
       float dd = length(f - offs);
       float rad = 0.045 + 0.05*push + 0.06*rip;
       float dotA = 1.0 - smoothstep(rad - 0.03, rad + 0.03, dd);
-      float lit = (0.05 + 0.07*n) * (0.6 + 0.4*uInt) + push*0.7 + rip*0.9;
+      float lit = (0.04 + 0.06*n) * (0.55 + 0.45*uInt) + push*(0.35 + 0.35*uInt) + rip*0.9;
       col += mix(vec3(0.75), lime, clamp(push*1.4 + rip, 0.0, 1.0)) * dotA * lit;
 
       vec2 uv = vUv - 0.5; uv.x *= asp*0.6;
@@ -1012,7 +1021,7 @@ gsap.ticker.add((tSec, dms) => {
   // background intensity: strong on hero + CTA, softer elsewhere
   const vh = innerHeight, sy = lenis.scroll;
   const heroVis = clamp(1 - sy / vh);
-  const target = svcST.isActive ? .35 : .45 + .55 * Math.max(heroVis, ctaVis);
+  const target = svcST.isActive ? .3 : .32 + .68 * Math.max(heroVis, ctaVis);
   intensity += (target - intensity) * damp(dt, 3);
   bgU.uTime.value = time; bgU.uMouse.value.set(pointer.sx, pointer.sy); bgU.uScroll.value = sy; bgU.uInt.value = intensity;
   bgU.uVel.value += ((lenis.velocity || 0) * 60 - bgU.uVel.value) * damp(dt, 6);
@@ -1052,7 +1061,7 @@ if (!TOUCH) {
   $$('a,button,.glass,.logo-card').forEach(el => { el.addEventListener('pointerenter', () => ring.classList.add('big')); el.addEventListener('pointerleave', () => ring.classList.remove('big')); });
   $$('.magnetic').forEach(el => {
     const xT = gsap.quickTo(el, 'x', { duration: .8, ease: 'elastic.out(1,0.4)' }), yT = gsap.quickTo(el, 'y', { duration: .8, ease: 'elastic.out(1,0.4)' });
-    const str = el.classList.contains('cta-btn') ? .45 : .3;
+    const str = el.classList.contains('cta-btn') ? .22 : .3;
     el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); xT((e.clientX - r.left - r.width / 2) * str); yT((e.clientY - r.top - r.height / 2) * str); });
     el.addEventListener('pointerleave', () => { xT(0); yT(0); });
   });
