@@ -67,7 +67,8 @@ background-image:url("data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="htt
 /* ══════ NAV ══════ */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(17,8,8,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:background 0.4s;}
 :root[data-theme="dark"] nav{background:rgba(6,6,6,0.9);}
-.n-logo{font-family:var(--heading);font-size:0.95rem;letter-spacing:2px;color:var(--text);}
+.n-logo{display:block;line-height:0;}
+.n-logo img{height:42px;width:auto;display:block;}
 .n-mid{display:flex;align-items:center;gap:32px;list-style:none;}
 .n-mid a{color:var(--text2);text-decoration:none;font-size:0.82rem;font-weight:400;transition:color 0.3s;}
 .n-mid a:hover{color:var(--text);}
@@ -257,7 +258,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 /* ══════ FOOTER ══════ */
 footer{padding:40px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;background:var(--bg);}
 footer span{font-size:0.78rem;color:var(--muted);}
-.f-logo{font-family:var(--heading);font-size:0.9rem;letter-spacing:2px;color:var(--text);}
+.f-logo{display:block;line-height:0;}
+.f-logo img{height:32px;width:auto;display:block;}
 footer a{color:var(--red2);text-decoration:none;font-size:0.8rem;font-weight:500;transition:color 0.3s;}
 footer a:hover{color:var(--peach);}
 .f-links{display:flex;gap:20px;}
@@ -270,6 +272,7 @@ footer a:hover{color:var(--peach);}
 /* ══════ RESPONSIVE ══════ */
 @media(max-width:768px){
   nav{padding:14px 20px;}
+  .n-logo img{height:34px;}
   .n-mid{display:none;}
   .hamburger{display:flex;}
   .hero{padding:0 20px 60px;}
@@ -294,7 +297,7 @@ footer a:hover{color:var(--peach);}
 <body>
 
 <nav>
-  <div class="n-logo">PILLRZ</div>
+  <a class="n-logo" href="#" aria-label="PILLRZ home"><img src="/logo.png" alt="PILLRZ" width="105" height="42"/></a>
   <ul class="n-mid">
     <li><a href="#products">Products</a></li>
     <li><a href="#work">Results</a></li>
@@ -510,7 +513,7 @@ footer a:hover{color:var(--peach);}
 </section>
 
 <footer>
-  <span class="f-logo">PILLRZ</span>
+  <span class="f-logo"><img src="/logo.png" alt="PILLRZ" width="80" height="32" loading="lazy"/></span>
   <span>&copy; 2026 PILLRZ. All rights reserved.</span>
   <div class="f-links">
     <a href="https://x.com/pillaboratories" target="_blank">X (Twitter)</a>
